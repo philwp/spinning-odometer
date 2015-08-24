@@ -1,0 +1,17 @@
+.counter {
+    width: 90px;
+    height: 96px;
+    overflow: hidden;
+}
+.counter .bg {
+    background: url('bg.png') no-repeat;
+    width: 71px;
+    height: 96px;
+    position: absolute;
+    z-index: 100;
+}
+
+.red {
+    background-color: red;
+
+}
