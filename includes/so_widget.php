@@ -33,7 +33,7 @@ class SO_Widget extends WP_Widget {
 		$after_text = $instance['after_text'];
 
 		?>
-
+		<a href="#" id="insert-image" class="button">Add image...</a>
 		<p>Start Number:
 			<input class="widefat"
 					name="<?php echo $this->get_field_name('start_num'); ?>"
@@ -46,19 +46,7 @@ class SO_Widget extends WP_Widget {
 					type="text" value="<?php echo esc_attr($end_num); ?>" />
 		</p>
 
-		<p>Odometer Style:
-			<select>
-				<option value="default">Plain</option>
-				<option value="minimal">Minimal</option>
-				<option value="car">Car</option>
-				<option value="train-station">Train Station</option>
-				<option value="slot-machine">Slot Machine</option>
-				<option value="plaza">Plaza</option>
-				<option value="digital">Digital</option>
-			</select>
-
-		</p>
-
+		
 		<p>Delay Time (in seconds ie. 1.5):
 			<input class="widefat"
 				name="<?php echo $this->get_field_name('delay_time'); ?>"
@@ -78,7 +66,7 @@ class SO_Widget extends WP_Widget {
 			</textarea>
 		</p>
 
-		<p>Text Before Odometer:
+		<p>Text After Odometer:
 			<textarea class="widefat"
 				name="<?php echo $this->get_field_name('after_text'); ?>" >
 					<?php echo esc_attr($after_text); ?>
@@ -102,20 +90,23 @@ class SO_Widget extends WP_Widget {
 
 		 function widget( $args, $instance){
 			extract( $args );
+			extract( $instance);
 			echo $before_widget;
 			if( $before_text ) {
 				echo '<div>' . $before_text. '</div>';
 			}
 			
-			echo '<h1>Try it yourself</h1> 
-            <div class="odometer" id="example1" style="font-size: '. $instance['font_size'].'px"> '
-                . $instance['start_num'] . 
-           ' </div> 
-            <p id="runexample1">Click</p>';
-   echo' <script>        setTimeout( function() {
-	 	jQuery(".odometer").html('. $instance['end_num'].');
-	 }, '. 1000 * ($instance['delay_time']) . ');</script>';
-			echo $after_text;
+			echo '<div class="odometer" id="example1" style="font-size: '. $font_size.'px"> '
+                . $start_num . ' </div>';
+		   	
+		   	echo' <script> setTimeout( function() {
+			 	jQuery(".odometer").html('. $end_num.');
+			 }, '. 1000 * $delay_time . ');</script>';
+			
+			if ( $after_text) {
+				echo '<div>'. $after_text . '</div>';
+			}			
+			
 			echo $after_widget;
 		}
 	} 
