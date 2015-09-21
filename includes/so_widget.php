@@ -33,7 +33,7 @@ class SO_Widget extends WP_Widget {
 		$after_text = $instance['after_text'];
 
 		?>
-		<a href="#" id="insert-image" class="button">Add image...</a>
+		
 		<p>Start Number:
 			<input class="widefat"
 					name="<?php echo $this->get_field_name('start_num'); ?>"
@@ -60,14 +60,14 @@ class SO_Widget extends WP_Widget {
 		</p>
 
 		<p>Text Before Odometer:
-			<textarea class="widefat"
+			<textarea class="widefat" rows="5" cols="20"
 				name="<?php echo $this->get_field_name('before_text'); ?>" >
 					<?php echo esc_attr($before_text); ?>
 			</textarea>
 		</p>
 
 		<p>Text After Odometer:
-			<textarea class="widefat"
+			<textarea class="widefat" rows="5" cols="20"
 				name="<?php echo $this->get_field_name('after_text'); ?>" >
 					<?php echo esc_attr($after_text); ?>
 			</textarea>
@@ -82,27 +82,38 @@ class SO_Widget extends WP_Widget {
 			$instance['end_num'] = sanitize_text_field( $new_instance['end_num']);
 			$instance['delay_time'] = sanitize_text_field( $new_instance['delay_time']);
 			$instance['font_size'] = sanitize_text_field( $new_instance['font_size']);
-			$instance['before_text'] = sanitize_text_field( $new_instance['before_text']);
-			$instance['after_text'] = sanitize_text_field( $new_instance['after_text']);
-
+			$instance['before_text'] =  stripslashes( wp_filter_post_kses( addslashes($new_instance['before_text']) ) );
+			$instance['after_text'] = stripslashes( wp_filter_post_kses( addslashes($new_instance['after_text']) ) );
 			return $instance;
 		}
+
+		
+
 
 		 function widget( $args, $instance){
 			extract( $args );
 			extract( $instance);
+			wp_enqueue_style( 'so-styles', SO_PLUGIN_URL . 'assests/css/odometer-theme-train-station.css');
+			
+			wp_enqueue_script( 'so-odometer', SO_PLUGIN_URL . 'assests/js/odometer.js',	array( ));
+			
+			
+
+			wp_enqueue_script( 'so-script', SO_PLUGIN_URL . 'assests/js/so-script.js', array( 'jquery', 'so-odometer'));
+			$so_script_vars = array(
+						'delay_time' => $delay_time,
+						'end_num' => $end_num);
+			wp_localize_script( 'so-script', 'so_script_vars', $so_script_vars);
+
 			echo $before_widget;
 			if( $before_text ) {
 				echo '<div>' . $before_text. '</div>';
 			}
 			
-			echo '<div class="odometer" id="example1" style="font-size: '. $font_size.'px"> '
+			echo '<div class="odometer" id="example1" style="font-size: '. $font_size.'px; margin: 0 auto;"> '
                 . $start_num . ' </div>';
 		   	
-		   	echo' <script> setTimeout( function() {
-			 	jQuery(".odometer").html('. $end_num.');
-			 }, '. 1000 * $delay_time . ');</script>';
-			
+		  	
 			if ( $after_text) {
 				echo '<div>'. $after_text . '</div>';
 			}			
