@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Spinning Odometer
-Plugin URI:  http://philweb.site/spinning-odometer
+Plugin URI:  http://philwp.com/spinning-odometer
 Description: Displays a number like an odometer with spinning numbers
-Version:     0.1
+Version:     0.2
 Author:     Phil Webster	
-Author URI:  http://philweb.site
+Author URI:  http://philwp.com
 License:     GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Domain Path: /languages
@@ -37,7 +37,17 @@ if(!defined('SO_PLUGIN_FILE')) {
 |--------------------------------------------------------------------------
 */
 
-include_once( SO_PLUGIN_DIR . '/includes/install.php');
-include_once( SO_PLUGIN_DIR. '/includes/functions.php');
-include_once( SO_PLUGIN_DIR. '/includes/scripts.php');
 include_once( SO_PLUGIN_DIR. '/includes/so_widget.php');
+
+/*
+|--------------------------------------------------------------------------
+| Register Widget
+|--------------------------------------------------------------------------
+*/
+
+function so_register_widgets() {
+	register_widget( 'SO_Widget' );
+}
+
+// hook using widget_init
+add_action( 'widgets_init', 'so_register_widgets' );
